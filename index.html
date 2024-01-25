@@ -1,0 +1,93 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Formatter</title>
+    <style>
+        /* Add some basic styling if needed */
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h2>JSON Formatter</h2>
+    
+    <label for="jsonInput">Paste JSON:</label>
+    <textarea id="jsonInput" placeholder="Paste your JSON here..."></textarea>
+
+    <button onclick="formatJSON()">Format JSON</button>
+
+    <label for="formattedOutput">Formatted Output:</label>
+    <pre id="formattedOutput"></pre>
+
+    <script>
+        function formatJSON() {
+            try {
+                const jsonInput = document.getElementById('jsonInput').value;
+                const jsonObject = JSON.parse(jsonInput);
+
+                // Format JSON object recursively
+                const formattedOutput = formatObject(jsonObject, '');
+
+                // Display the formatted output
+                document.getElementById('formattedOutput').textContent = formattedOutput;
+            } catch (error) {
+                // Handle invalid JSON
+                alert('Invalid JSON. Please check your input.');
+            }
+        }
+
+        function formatObject(obj, prefix, indentation = 0) {
+            let formattedOutput = '';
+            for (const key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    const value = obj[key];
+                    const fullKey = prefix ? `${prefix}_${key}` : key;
+                    const indent = ' '.repeat(indentation * 4);
+
+                    if (value && typeof value === 'object') {
+                        const nestedOutput = formatObject(value, fullKey, indentation + 1);
+                        if (nestedOutput) {
+                            formattedOutput += `${indent}${fullKey}:\n${nestedOutput}`;
+                        }
+                    } else if (value !== undefined && value !== null && value !== '') {
+                        formattedOutput += `${indent}${fullKey}: ${formatValue(fullKey, value)}\n`;
+                    }
+                }
+            }
+            return formattedOutput;
+        }
+
+        function formatValue(key, value) {
+            if (key.includes('Date')) {
+                // Format date values
+                return formatDate(value);
+            } else if (key.includes('Number')) {
+                // Format phone numbers
+                return formatPhoneNumber(value);
+            } else {
+                return JSON.stringify(value, null, 2);
+            }
+        }
+
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        function formatPhoneNumber(phoneNumber) {
+            // Implement your phone number formatting logic here
+            return phoneNumber;
+        }
+    </script>
+</body>
+</html>
