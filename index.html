@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -49,7 +49,7 @@
         function formatObject(obj, prefix, indentation = 0) {
             let formattedOutput = '';
             for (const key in obj) {
-                if (obj.hasOwnProperty(key)) {
+                if (obj.hasOwnProperty(key) && key !== 'ComplainUpdates') {
                     const value = obj[key];
                     const fullKey = prefix ? `${prefix}_${key}` : key;
                     const indent = ' '.repeat(indentation * 4);
