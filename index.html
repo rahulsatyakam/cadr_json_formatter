@@ -78,12 +78,12 @@
         jsonInput.ComplainNatures.forEach(nature => {
                     if (nature.ComplainComments && nature.ComplainComments.length > 0) {
             nature.ComplainComments.forEach(comment => {
-              const formattedComment = `&nbsp &nbsp<b>Comment created by</b> ${comment.User?.userName || "Unknown User"} at ${formatDate(comment.createdAt)}<br>&nbsp&nbsp${comment.description} `;
+              const formattedComment = `&nbsp &nbsp<b>Comment created by ${comment.User?.userName || "Unknown User"} at ${formatDate(comment.createdAt)}</b><br>&nbsp&nbsp${comment.description} `;
                nestedComments.push(formattedComment);
               if (comment.NestedComments && comment.NestedComments.length > 0) {
                 comment.NestedComments.forEach(nestedComment => {
                   console.log("Nested Comment:", nestedComment.description);
-                  const formattedComment = `&nbsp &nbsp <b>Nested comment created by</b>  ${nestedComment.User?.userName || "Unknown User"} at ${formatDate(nestedComment.createdAt)}<br>&nbsp&nbsp${nestedComment.description}  `;
+                  const formattedComment = `&nbsp &nbsp <b>Nested comment created by ${nestedComment.User?.userName || "Unknown User"} at ${formatDate(nestedComment.createdAt)}</b><br>&nbsp&nbsp${nestedComment.description}  `;
                   nestedComments.push(formattedComment);
                 });
               }
@@ -134,5 +134,3 @@ jsonInput.ComplainNatures.forEach(complaintNature => {
   <pre id="output"></pre>
 </body>
 </html>
-
-  
