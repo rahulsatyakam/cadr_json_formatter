@@ -1,5 +1,4 @@
-
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -54,6 +53,7 @@
         "<b>Claim amount</b>": jsonInput.claimAmount,
         "<b>Mode of Holding Securities</b>": jsonInput.modeOfHoldingSecurities.mode,
         "<br>&nbsp&nbsp<b>Complainant Details</b>": {
+          "<b>Address</b>": jsonInput.Complainant.address,
           "<b>Mobile Number</b>": jsonInput.Complainant.phoneNumber,
           "<b>Email</b>": jsonInput.Complainant.email,
           "<b>PAN</b>": jsonInput.Complainant.panNumber 
@@ -68,6 +68,7 @@
       };
       const nestedComments = [];
       const disputedetails =[];
+      const filesData = [];
       //iterate through complain natures for extracting issue description
       
 
@@ -77,12 +78,12 @@
         jsonInput.ComplainNatures.forEach(nature => {
                     if (nature.ComplainComments && nature.ComplainComments.length > 0) {
             nature.ComplainComments.forEach(comment => {
-              const formattedComment = `&nbsp &nbsp<b>Comment created by</b> ${comment.User?.userName || "Unknown User"}<br>${comment.description}`;
+              const formattedComment = `&nbsp &nbsp<b>Comment created by</b> ${comment.User?.userName || "Unknown User"} at ${formatDate(comment.createdAt)}<br>&nbsp&nbsp${comment.description} `;
                nestedComments.push(formattedComment);
               if (comment.NestedComments && comment.NestedComments.length > 0) {
                 comment.NestedComments.forEach(nestedComment => {
                   console.log("Nested Comment:", nestedComment.description);
-                  const formattedComment = `&nbsp &nbsp <b>Nested comment created by</b>  ${nestedComment.User?.userName || "Unknown User"} <br>${nestedComment.description} `;
+                  const formattedComment = `&nbsp &nbsp <b>Nested comment created by</b>  ${nestedComment.User?.userName || "Unknown User"} at ${formatDate(nestedComment.createdAt)}<br>&nbsp&nbsp${nestedComment.description}  `;
                   nestedComments.push(formattedComment);
                 });
               }
@@ -102,10 +103,17 @@ jsonInput.ComplainNatures.forEach(complaintNature => {
         console.log("Description:", description);
 
     });
+jsonInput.ComplainNatures.forEach(complaintNature => {
+    complaintNature.files.forEach(file => {
+        const filedetails = `<b>${file.fileName}</b> <br> Uploaded by ${file.uploadedBy} at ${formatDate(file.uploadedAt)} <br>`;
+        filesData.push(filedetails);
+    });
+});
+
 
       extractedData["<b>Dispute details</b>"] = disputedetails;
       extractedData["<b>Comments</b>"] = nestedComments;
-
+      extractedData["<b>Files</b>"] = filesData;
       return extractedData;
     }
     function formatDate(dateString) {
@@ -126,3 +134,5 @@ jsonInput.ComplainNatures.forEach(complaintNature => {
   <pre id="output"></pre>
 </body>
 </html>
+
+  
