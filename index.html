@@ -15,13 +15,27 @@
 
         // Extract fields using the provided JavaScript function
         const extractedData = extractFieldsFromJson(jsonData);
+        //  extracted the JSON data and stored it in a variable called extractedData
+        let formattedOutput = JSON.stringify(extractedData, null, 2);
+
+       // Remove double quotes
+       formattedOutput = formattedOutput.replace(/"/g, '');
+
+      // Remove commas
+      formattedOutput = formattedOutput.replace(/,/g, '');
+
+    // Remove square brackets
+    formattedOutput = formattedOutput.replace(/[\[\]]/g, '');
+
+     // Remove curly brackets
+     formattedOutput = formattedOutput.replace(/[{}]/g, '');
 
         // Display the formatted output
-        document.getElementById('output').innerHTML = JSON.stringify(extractedData, null, 2);
+        document.getElementById('output').innerHTML = formattedOutput;
       } catch (error) {
         // Handle JSON parsing errors
         console.error('Invalid JSON input:', error);
-        document.getElementById('output').innerText = 'Invalid JSON input. Please check the format and try again.';
+        document.getElementById('output').innerHTML = 'Invalid JSON input. Please check the format and try again.';
       }
     }
 
@@ -30,13 +44,13 @@
       // Modify the function according to your requirements
       const extractedData = {
         "<b>Name</b>": jsonInput.complainantName,
-        "Dispute Category": jsonInput.CategoryMaster.categoryName,
-        "Dispute Sub Category": jsonInput.SubCategoryMaster.categoryName,
-        "Company Name": jsonInput.Respondent.organisationName,
-        "Complainant Details": {
-          "Mobile Number": jsonInput.Complainant.phoneNumber,
-          "Email": jsonInput.Complainant.email,
-          "PAN": jsonInput.Complainant.panNumber
+        "<b>Dispute Category</b>": jsonInput.CategoryMaster.categoryName,
+        "<b>Dispute Sub Category</b>": jsonInput.SubCategoryMaster.categoryName,
+        "<b>Company Name</b>": jsonInput.Respondent.organisationName,
+        "<b>Complainant Details</b>": {
+          "<b>Mobile Number</b>": jsonInput.Complainant.phoneNumber,
+          "<b>Email</b>": jsonInput.Complainant.email,
+          "<b>PAN</b>": jsonInput.Complainant.panNumber 
         }
       };
       
@@ -48,12 +62,12 @@
         jsonInput.ComplainNatures.forEach(nature => {
           if (nature.ComplainComments && nature.ComplainComments.length > 0) {
             nature.ComplainComments.forEach(comment => {
-              const formattedComment = `${comment.description}\nCreated by ${comment.User?.userName || "Unknown User"}`;
+              const formattedComment = `${comment.description}<br>&nbsp &nbsp<b>created by</b> ${comment.User?.userName || "Unknown User"}`;
                nestedComments.push(formattedComment);
               if (comment.NestedComments && comment.NestedComments.length > 0) {
                 comment.NestedComments.forEach(nestedComment => {
                   console.log("Nested Comment:", nestedComment.description);
-                  const formattedComment = `Nested Comment : ${nestedComment.description} \n Created by ${nestedComment.User?.userName || "Unknown User"}`;
+                  const formattedComment = `Nested Comment : ${nestedComment.description} <br> &nbsp &nbsp <b>created</b> by ${nestedComment.User?.userName || "Unknown User"}`;
                   nestedComments.push(formattedComment);
                 });
               }
@@ -62,7 +76,7 @@
           }
         });
       }
-      extractedData["comments"] = nestedComments;
+      extractedData["Comments"] = nestedComments;
 
       return extractedData;
     }
