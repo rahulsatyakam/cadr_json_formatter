@@ -3,93 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JSON Extractor</title>
-  <script>
-    function extractFields() {
-      // Get the JSON input from the textarea
-      const jsonInput = document.getElementById('jsonInput').value;
-
-      try {
-        // Parse the JSON input
-        const jsonData = JSON.parse(jsonInput);
-
-        // Extract fields using the provided JavaScript function
-        const extractedData = extractFieldsFromJson(jsonData);
-        //  extracted the JSON data and stored it in a variable called extractedData
-        let formattedOutput = JSON.stringify(extractedData, null, 2);
-
-       // Remove double quotes
-       formattedOutput = formattedOutput.replace(/"/g, '');
-
-      // Remove commas
-      formattedOutput = formattedOutput.replace(/,/g, '');
-
-    // Remove square brackets
-    formattedOutput = formattedOutput.replace(/[\[\]]/g, '');
-
-     // Remove curly brackets
-     formattedOutput = formattedOutput.replace(/[{}]/g, '');
-
-        // Display the formatted output
-        document.getElementById('output').innerHTML = formattedOutput;
-      } catch (error) {
-        // Handle JSON parsing errors
-        console.error('Invalid JSON input:', error);
-        document.getElementById('output').innerHTML = 'Invalid JSON input. Please check the format and try again.';
-      }
+  <title>JSON Formatter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
     }
 
-    // Your extractFields function goes here
-    function extractFieldsFromJson(jsonInput) {
-      // Modify the function according to your requirements
-      const extractedData = {
-        "<b>Name</b>": jsonInput.complainantName,
-        "<b>Dispute Category</b>": jsonInput.CategoryMaster.categoryName,
-        "<b>Dispute Sub Category</b>": jsonInput.SubCategoryMaster.categoryName,
-        "<b>Company Name</b>": jsonInput.Respondent.organisationName,
-        "<b>Complainant Details</b>": {
-          "<b>Mobile Number</b>": jsonInput.Complainant.phoneNumber,
-          "<b>Email</b>": jsonInput.Complainant.email,
-          "<b>PAN</b>": jsonInput.Complainant.panNumber 
-        }
-      };
-      
-      const nestedComments = [];
-
-      // Iterate through ComplainComments and their nested comments
-      
-  if (jsonInput.ComplainNatures && jsonInput.ComplainNatures.length > 0) {
-        jsonInput.ComplainNatures.forEach(nature => {
-          if (nature.ComplainComments && nature.ComplainComments.length > 0) {
-            nature.ComplainComments.forEach(comment => {
-              const formattedComment = `${comment.description}<br>&nbsp &nbsp<b>created by</b> ${comment.User?.userName || "Unknown User"}`;
-               nestedComments.push(formattedComment);
-              if (comment.NestedComments && comment.NestedComments.length > 0) {
-                comment.NestedComments.forEach(nestedComment => {
-                  console.log("Nested Comment:", nestedComment.description);
-                  const formattedComment = `Nested Comment : ${nestedComment.description} <br> &nbsp &nbsp <b>created</b> by ${nestedComment.User?.userName || "Unknown User"}`;
-                  nestedComments.push(formattedComment);
-                });
-              }
-              nestedComments.push("");
-            });
-          }
-        });
-      }
-      extractedData["Comments"] = nestedComments;
-
-      return extractedData;
+    button {
+      padding: 10px;
+      margin-bottom: 20px;
     }
-  </script>
+
+    pre {
+      white-space: pre-wrap;
+    }
+  </style>
 </head>
 <body>
-  <h2>JSON Extractor</h2>
-  <p>Enter your JSON data below:</p>
-  <textarea id="jsonInput" rows="10" cols="50"></textarea>
-  <br>
-  <button onclick="extractFields()">Extract Fields</button>
-  <br>
-  <h3>Formatted Output:</h3>
+  <label for="jsonInput">Enter JSON Data:</label>
+  <textarea id="jsonInput" rows="10" cols="50"></textarea><br>
+  <button onclick="formatJSON()">Format JSON</button>
   <pre id="output"></pre>
+
+  <script>
+    // Title mapping function
+    function getTitle(key) {
+      const titleMap = {
+        complainantName: "Name",
+        CategoryMaster_categoryName: "Dispute Category",
+        SubCategoryMaster_categoryName: "Dispute Sub Category",
+        Respondent_organisationName: "Company Name",
+        Complainant_phoneNumber: "Mobile Number",
+        Complainant_email: "Email",
+        Complainant_panNumber: "PAN",
+        Respondent_primaryContact: "Mobile Number",
+        Respondent_primaryEmail: "Email",
+        Respondent_registeredAddress: "Address",
+        claimAmount: "Claim Amount",
+        modeOfHoldingSecurities_mode: "Mode of holding securities",
+        ComplainNatures_0_description: "Dispute Details",
+        ComplainNatures_0_ComplainComments_0_description: "Comments Section",
+        ComplainNatures_0_ComplainComments_0_NestedComments_0_description: "Nested Comments"
+      };
+
+      return titleMap[key] || key;
+    }
+
+    // Function to format the JSON object
+    function formatJSON() {
+      const jsonInput = document.getElementById('jsonInput').value;
+      try {
+        const jsonData = JSON.parse(jsonInput);
+        const formattedJSON = formatObject(jsonData);
+        document.getElementById('output').innerHTML = formattedJSON;
+      } catch (error) {
+        alert('Invalid JSON data. Please enter valid JSON.');
+      }
+    }
+
+    // Recursive function to format nested objects
+    function formatObject(obj) {
+      let result = '';
+      for (const key in obj) {
+        const title = getTitle(key);
+        const value = formatValue(obj[key]);
+        result += `${title}: ${value}\n\n`;
+      }
+      return result.trim();
+    }
+
+    // Function to format values
+    function formatValue(value) {
+      if (typeof value === 'object') {
+        return formatObject(value);
+      } else if (value instanceof Date) {
+        return formatDate(value);
+      } else {
+        return value;
+      }
+    }
+
+    // Function to format date values
+    function formatDate(date) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' };
+      return date.toLocaleDateString('en-US', options);
+    }
+  </script>
 </body>
 </html>
