@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -43,12 +44,16 @@
     function extractFieldsFromJson(jsonInput) {
       // Modify the function according to your requirements
       const extractedData = {
-        "<b>Name</b>": jsonInput.complainantName,
+        "<b>Date of Registration</b>": formatDate(jsonInput.createdAt),
+        "<b>Date of Primary Dispute</b>": formatDate(jsonInput.primaryCaseRefDate),
+        "<b>Dispute of conciliation initiated</b>": formatDate(jsonInput.caseAllocateToODR),
+        "<br>&nbsp&nbsp<b>Name</b>": jsonInput.complainantName,
         "<b>Dispute Category</b>": jsonInput.CategoryMaster.categoryName,
         "<b>Dispute Sub Category</b>": jsonInput.SubCategoryMaster.categoryName,
         "<b>Company Name</b>": jsonInput.Respondent.organisationName,
-
-        "<b>Complainant Details</b>": {
+        "<b>Claim amount</b>": jsonInput.claimAmount,
+        "<b>Mode of Holding Securities</b>": jsonInput.modeOfHoldingSecurities.mode,
+        "<br>&nbsp&nbsp<b>Complainant Details</b>": {
           "<b>Mobile Number</b>": jsonInput.Complainant.phoneNumber,
           "<b>Email</b>": jsonInput.Complainant.email,
           "<b>PAN</b>": jsonInput.Complainant.panNumber 
@@ -62,7 +67,7 @@
        
       };
       const nestedComments = [];
-
+      const disputedetails =[];
       //iterate through complain natures for extracting issue description
       
 
@@ -86,11 +91,28 @@
           }
         });
       }
+jsonInput.ComplainNatures.forEach(complaintNature => {
+        // Extract subNatureType and description for each complaint nature
+        const subNatureType = complaintNature.subNatureType;
+        const description = complaintNature.description;
+        disputedetails.push(subNatureType);
+        disputedetails.push(description);
+        // Use the extracted data as needed (e.g., display or process it)
+        console.log("Sub Nature Type:", subNatureType);
+        console.log("Description:", description);
 
-      extractedData["Comments"] = nestedComments;
+    });
+
+      extractedData["<b>Dispute details</b>"] = disputedetails;
+      extractedData["<b>Comments</b>"] = nestedComments;
 
       return extractedData;
     }
+    function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
   </script>
 </head>
 <body>
