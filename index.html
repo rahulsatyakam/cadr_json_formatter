@@ -30,11 +30,11 @@
      // Remove curly brackets
      formattedOutput = formattedOutput.replace(/[{}]/g, '');
 
-    // Remove newline characters
-     //formattedOutput = formattedOutput.replace(/\n/g, '');
+    
 
         // Remove literal "\n" characters
-     formattedOutput = formattedOutput.replace(/\\n/g, '');
+     //formattedOutput = formattedOutput.replace(/\\n/g, '');
+        formattedOutput = formattedOutput.replace(/([^\\])\\n/g, '$1');
 
 
         // Display the formatted output
