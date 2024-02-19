@@ -33,6 +33,10 @@
     // Remove newline characters
      //formattedOutput = formattedOutput.replace(/\n/g, '');
 
+        // Remove literal "\n" characters
+     formattedOutput = formattedOutput.replace(/\\n/g, '');
+
+
         // Display the formatted output
         document.getElementById('output').innerHTML = formattedOutput;
       } catch (error) {
