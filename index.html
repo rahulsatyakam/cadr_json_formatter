@@ -42,7 +42,8 @@
     // Your extractFields function goes here
     function extractFieldsFromJson(jsonInput) {
       // Modify the function according to your requirements
-      const extractedData = {
+      /*
+     const extractedData = {
         "<b>Date of Registration</b>": formatDate(jsonInput.createdAt),
         "<b>Date of Primary Dispute</b>": formatDate(jsonInput.primaryCaseRefDate),
         "<b>Dispute of conciliation initiated</b>": formatDate(jsonInput.caseAllocateToODR),
@@ -65,7 +66,35 @@
         }
 
        
-      };
+      }; */
+
+      const extractedData = {
+        // Define default values for fields that might be null
+        "<b>Date of Registration</b>": jsonInput.createdAt ? formatDate(jsonInput.createdAt) : "Not specified",
+        "<b>Date of Primary Dispute</b>": jsonInput.primaryCaseRefDate ? formatDate(jsonInput.primaryCaseRefDate) : "Not specified",
+        "<b>Dispute of conciliation initiated</b>": jsonInput.caseAllocateToODR ? formatDate(jsonInput.caseAllocateToODR) : "Not specified",
+        // Add default values for other fields as needed
+        "<br>&nbsp&nbsp<b>Name</b>": jsonInput.complainantName || "Not specified",
+        "<b>Dispute Category</b>": jsonInput.CategoryMaster ? jsonInput.CategoryMaster.categoryName : "Not specified",
+        "<b>Dispute Sub Category</b>": jsonInput.SubCategoryMaster ? jsonInput.SubCategoryMaster.categoryName : "Not specified",
+        "<b>Company Name</b>": jsonInput.Respondent ? jsonInput.Respondent.organisationName : "Not specified",
+        "<b>Claim amount</b>": jsonInput.claimAmount || "Not specified",
+        "<b>Mode of Holding Securities</b>": jsonInput.modeOfHoldingSecurities ? jsonInput.modeOfHoldingSecurities.mode : "Not specified",
+        // Add default values for nested objects as needed
+        "<br>&nbsp&nbsp<b>Complainant Details</b>": {
+            "<b>Address</b>": jsonInput.Complainant ? jsonInput.Complainant.address : "Not specified",
+            "<b>Mobile Number</b>": jsonInput.Complainant ? jsonInput.Complainant.phoneNumber : "Not specified",
+            "<b>Email</b>": jsonInput.Complainant ? jsonInput.Complainant.email : "Not specified",
+            "<b>PAN</b>": jsonInput.Complainant ? jsonInput.Complainant.panNumber : "Not specified"
+        },
+        "<b>Respondent Details</b>": {
+            "<b>Address</b>": jsonInput.Respondent ? jsonInput.Respondent.registeredAddress : "Not specified",
+            "<b>primary email</b>": jsonInput.Respondent ? jsonInput.Respondent.primaryEmail : "Not specified",
+            "<b>Contact</b>": jsonInput.Respondent ? jsonInput.Respondent.primaryContact : "Not specified"
+        },
+        // Add default values for arrays or nested objects as needed
+        
+    };
       const nestedComments = [];
       const disputedetails =[];
       const filesData = [];
