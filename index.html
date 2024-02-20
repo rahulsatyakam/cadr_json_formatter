@@ -36,6 +36,12 @@
      //formattedOutput = formattedOutput.replace(/\\n/g, '');
         formattedOutput = formattedOutput.replace(/([^\\])\\n/g, '$1');
 
+        // Remove literal "\n" characters without removing actual newline characters from beginning of string
+      formattedOutput = formattedOutput.replace(/([^\\]|^)\\n/g, '$1');
+
+// Remove literal "\n" characters without removing actual newline characters from middle of string 
+formattedOutput = formattedOutput.replace(/([^\\]|^)\\n(?![\r\n])/g, '$1');
+
 
         // Display the formatted output
         document.getElementById('output').innerHTML = formattedOutput;
