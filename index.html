@@ -30,18 +30,11 @@
      // Remove curly brackets
      formattedOutput = formattedOutput.replace(/[{}]/g, '');
 
-    
-
-        // Remove literal "\n" characters
-     //formattedOutput = formattedOutput.replace(/\\n/g, '');
-        formattedOutput = formattedOutput.replace(/([^\\])\\n/g, '$1');
-
-        // Remove literal "\n" characters without removing actual newline characters from beginning of string
+     // Remove literal "\n" characters without removing actual newline characters from beginning of string
       formattedOutput = formattedOutput.replace(/([^\\]|^)\\n/g, '$1');
 
 // Remove literal "\n" characters without removing actual newline characters from middle of string 
 formattedOutput = formattedOutput.replace(/([^\\]|^)\\n(?![\r\n])/g, '$1');
-
 
         // Display the formatted output
         document.getElementById('output').innerHTML = formattedOutput;
@@ -93,6 +86,11 @@ formattedOutput = formattedOutput.replace(/([^\\]|^)\\n(?![\r\n])/g, '$1');
         "<b>Company Name</b>": jsonInput.Respondent ? jsonInput.Respondent.organisationName : "Not specified",
         "<b>Claim amount</b>": jsonInput.claimAmount || "Not specified",
         "<b>Mode of Holding Securities</b>": jsonInput.modeOfHoldingSecurities ? jsonInput.modeOfHoldingSecurities.mode : "Not specified",
+         "<b>DP ID</b>": jsonInput.modeOfHoldingSecurities ? jsonInput.modeOfHoldingSecurities.dpId : "Not specified",
+          "<b>Client ID</b>": jsonInput.modeOfHoldingSecurities ? jsonInput.modeOfHoldingSecurities.clientId : "Not specified",
+          "<b>Folio No</b>": jsonInput.modeOfHoldingSecurities ? jsonInput.modeOfHoldingSecurities.folioNo : "Not specified",
+         "<b>Distictive No</b>": jsonInput.modeOfHoldingSecurities ? jsonInput.modeOfHoldingSecurities.distinctiveNo : "Not specified",
+          "<b>Certficate No</b>": jsonInput.modeOfHoldingSecurities ? jsonInput.modeOfHoldingSecurities.certificateNo : "Not specified",
         // Add default values for nested objects as needed
         "<br>&nbsp&nbsp<b>Complainant Details</b>": {
             "<b>Address</b>": jsonInput.Complainant ? jsonInput.Complainant.address : "Not specified",
