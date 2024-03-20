@@ -146,15 +146,17 @@ jsonInput.ComplainNatures.forEach(complaintNature => {
 
     });
        }
+
+      if (jsonInput.ComplainNatures && jsonInput.ComplainNatures.length > 0) {
 jsonInput.ComplainNatures.forEach(complaintNature => {
-   if (complaintNature.files && complainNature.files.length > 0) {
+   if (complaintNature.files && complaintNature.files.length > 0) {
     complaintNature.files.forEach(file => {
         const filedetails = `<b>${file.fileName}</b> <br> Uploaded by ${file.uploadedBy} at ${formatDate(file.uploadedAt)} <br>`;
         filesData.push(filedetails);
     });
    }
 });
-
+      }
 
       extractedData["<b>Dispute details</b>"] = disputedetails;
       extractedData["<b>Comments</b>"] = nestedComments;
