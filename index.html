@@ -132,7 +132,8 @@ formattedOutput = formattedOutput.replace(/([^\\]|^)\\n(?![\r\n])/g, '$1');
           }
         });
       }
-jsonInput.ComplainNatures.forEach(complaintNature => {
+      if (jsonInput.ComplainNatures && jsonInput.ComplainNatures.length > 0) {
+      jsonInput.ComplainNatures.forEach(complaintNature => {
         // Extract subNatureType and description for each complaint nature
         const subNatureType = complaintNature.subNatureType;
         const description = complaintNature.description;
@@ -143,13 +144,17 @@ jsonInput.ComplainNatures.forEach(complaintNature => {
         console.log("Description:", description);
 
     });
-jsonInput.ComplainNatures.forEach(complaintNature => {
+      }
+    if (jsonInput.ComplainNatures && jsonInput.ComplainNatures.length > 0) {   
+    jsonInput.ComplainNatures.forEach(complaintNature => {
+       if (complaintNature.files && complaintNature.files.length > 0) {
     complaintNature.files.forEach(file => {
         const filedetails = `<b>${file.fileName}</b> <br> Uploaded by ${file.uploadedBy} at ${formatDate(file.uploadedAt)} <br>`;
         filesData.push(filedetails);
     });
+       }
 });
-
+    }
 
       extractedData["<b>Dispute details</b>"] = disputedetails;
       extractedData["<b>Comments</b>"] = nestedComments;
